@@ -18,11 +18,9 @@ Since the max value of crim is significantly higher than the median, there certa
 
 The histogram of crimes rates v/s number of suburbs is plotted as shown,
 
-![image](https://user-images.githubusercontent.com/42225976/157336658-98237a8d-44ba-446d-a45d-a27b1dc62b99.png)
+![image](https://user-images.githubusercontent.com/42225976/157337769-8b963558-107d-4d12-b301-2ffb84d9bdb0.png)
 
 From the histogram, we can consider the crime rates to be high if it crosses 30 crime rates in the Boston suburub and there are 8 suburbs with crim rates more than 30 and hence are very high.
-
-![image](https://user-images.githubusercontent.com/42225976/157336857-6593e7ed-e634-4e40-aee2-5864e827c8e4.png)
 
 Summary of crime rates related to tax rates are,
 
