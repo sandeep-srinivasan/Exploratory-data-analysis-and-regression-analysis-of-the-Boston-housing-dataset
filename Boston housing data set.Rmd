@@ -1,0 +1,304 @@
+---
+title: 'Boston housing data set'
+output:
+  word_document: default
+  pdf_document: default
+  html_notebook: default
+---
+
+1. This exercise involves the Boston housing data set.
+a.
+
+```{r}
+library(MASS)
+head(Boston)
+nrow(Boston)
+ncol(Boston)
+```
+The Boston data set has 506 rows and 14 columns.
+The rows in the dataset represents the number of cases or values.
+The columns represents the variables or the attributes.
+
+b. Make some pairwise scatterplots of the predictors (columns) in this data set. Describe your findings.
+
+```{r}
+summary(Boston)
+```
+
+```{r}
+pairs(Boston)
+```
+
+```{r}
+library("Hmisc")
+Boston.rcorr = rcorr(as.matrix(Boston))
+Boston.rcorr
+```
+
+```{r}
+Boston.coeff = Boston.rcorr$r
+Boston.p = Boston.rcorr$P
+Boston.p
+```
+
+The correlation matrix and the p values associated with the variables are as shown.
+
+```{r}
+library(corrplot)
+corrplot(cor(Boston))
+```
+
+```{r}
+pairs(Boston[,-c(1,2,4,7,8,9,12)])
+```
+
+The correlation of various attributes with the medv is as shown above. If the values of correlation > + or - 0.4, it is considered as having strong relationship and has been retained in the scatterplot shown above.
+
+c. Are any of the predictors associated with per capita crime rate? If so, explain the relationship.
+
+```{r}
+cor(Boston,Boston$crim)
+```
+The correlation of different predictors with the per capita crime rate is as shown above. The predictors having strong positive relationship with crim are indus, nox, rad, tax, lstat.
+
+```{r}
+Boston.p[1,]
+```
+The corresponding p values reinstate that there is an association with crim (response variable) and other predictor variables.
+
+d. Do any of the suburbs of Boston appear to have particularly high crime rates? Tax rates? Pupil-teacher ratios? Comment on the range of each predictor.
+
+```{r}
+summary(Boston$crim)
+```
+
+Since the max value of crim is significantly higher than the median, there certainly seems that there are few suburbs which have particularly high crime rates.
+
+```{r}
+hist(Boston$crim, xlab = "Crime rate", ylab="Number of Suburbs", main="Histogram of crime rates")
+```
+
+From the histogram, we can consider the crime rates to be high if it crosses 30 crime rates in the Boston suburub.
+
+```{r}
+length(Boston$crim[Boston$crim>30])
+```
+There are 8 suburbs with crim rates more than 30 and hence are very high.
+
+```{r}
+summary(Boston$tax)
+```
+
+Since the max value of crim is significantly higher than the median, there certainly seems that there are few suburbs which have particularly high tax rates.
+
+```{r}
+hist(Boston$tax, xlab = "Tax rate", ylab="Number of Suburbs", main="Histogram of tax rates")
+```
+
+From the histogram, we can consider the taxes to be high if it crosses a value of 500.
+
+```{r}
+length(Boston$tax[Boston$tax > 500])
+```
+
+There are 137 suburbs with tax rates more than 500 and hence are very high.
+
+```{r}
+summary(Boston$ptratio)
+```
+
+We can see that the max value is slightly higher than the 3rd quartile, therefore anything greater than that has high ptratio.
+
+```{r}
+hist(Boston$ptratio, xlab = "pupil-teacher ratio by town", ylab="Number of Suburbs", main="Histogram of pupil-teacher ratio")
+```
+
+The histogram also reinstates the same regarding high ptratio.
+
+```{r}
+length(Boston$ptratio[Boston$ptratio > 21])
+```
+
+There are 18 suburbs with pupil-teacher ratio more than 21 and hence is unfavourable.
+
+e. How many of the suburbs in this data set bound the Charles river?
+
+```{r}
+table(Boston$chas)
+```
+
+```{r}
+length(Boston$chas[Boston$chas == 1])
+```
+
+There are 35 the suburbs in this data set bound the Charles river.
+
+f. What is the median pupil-teacher ratio among the towns in this data set?
+
+```{r}
+summary(Boston$ptratio)
+```
+
+The median pupil-teacher ratio among the towns is 19.
+
+g. Which suburb of Boston has lowest median value of owner-occupied homes? What are the values of the other predictors for that suburb, and how do those values compare to the overall ranges for those predictors? Comment on your findings.
+
+```{r}
+which.min(Boston$medv)
+```
+The suburb of Boston has lowest median value of owner-occupied homes is 399.
+
+```{r}
+Boston[399,]
+```
+
+Comparing to the summary of the Boston dataset, in this suburb, the crime rates seem to be high, proportion of owner-occupied units built prior to 1940 is very high, index of accessibility to radial highways is high, full-value property-tax rate per \$10,000 is high, full-value property-tax rate is very high which is unfavourable, lower status of the population (percent) is also high and median value of owner-occupied homes in \$1000s is very low.
+
+h. In this data set, how many of the suburbs average more than seven rooms per dwelling? More than eight rooms per dwelling? Comment on the suburbs that average more than eight rooms per dwelling.
+
+```{r}
+over7 = length(Boston$rm[Boston$rm > 7])
+over7
+```
+The suburbs average more than seven rooms per dwelling is 64.
+
+```{r}
+over8 = length(Boston$rm[Boston$rm > 8])
+over8
+```
+The suburbs average more than eight rooms per dwelling is 13.
+
+```{r}
+summary(Boston[Boston$rm > 8, ])
+```
+
+The summary of the suburbs having average rooms more than 8 is similar to that of the Boston dataset but the black predictor seems to be on the higher end for this setting.
+
+15. This problem involves the Boston data set, which we saw in the lab for this chapter. We will now try to predict per capita crime rate using the other variables in this data set. In other words, per capita crime rate is the response, and the other variables are the predictors.
+
+a. For each predictor, fit a simple linear regression model to predict the response. Describe your results. In which of the models is there a statistically significant association between the predictor and the response? Create some plots to back up your assertions.
+
+```{r}
+lm_zn = lm(crim ~ zn, data=Boston)
+summary(lm_zn)
+```
+
+```{r}
+lm_indus = lm(crim ~ indus, data=Boston)
+summary(lm_indus)
+```
+
+```{r}
+lm_chas = lm(crim ~ chas, data=Boston)
+summary(lm_chas)
+```
+
+```{r}
+lm_nox = lm(crim ~ nox, data=Boston)
+summary(lm_nox)
+```
+
+```{r}
+lm_rm = lm(crim ~ rm, data=Boston)
+summary(lm_rm)
+```
+
+```{r}
+lm_age = lm(crim ~ age,data=Boston)
+summary(lm_age)
+```
+
+```{r}
+lm_dis = lm(crim ~ dis, data=Boston)
+summary(lm_dis)
+```
+
+```{r}
+lm_rad = lm(crim ~ rad, data=Boston)
+summary(lm_rad)
+```
+
+```{r}
+lm_tax = lm(crim ~ tax, data=Boston)
+summary(lm_tax)
+```
+
+```{r}
+lm_ptratio = lm(crim ~ ptratio,data=Boston)
+summary(lm_ptratio)
+```
+
+```{r}
+lm_black = lm(crim ~ black, data=Boston)
+summary(lm_black)
+```
+
+```{r}
+lm_lstat = lm(crim ~ lstat, data=Boston)
+summary(lm_lstat)
+```
+
+```{r}
+lm_medv = lm(crim ~ medv, data=Boston)
+summary(lm_medv)
+```
+
+To test for significance we carry out the hypothesis test:
+Ho: beta1 = 0
+Ha: beta1 not equal to 0
+
+Considering alpha = 0.05
+
+Considering the relationship between the predictor variables with the response variables, we see that for chas, the p > alpha, so it has no association with crim. But all other variables are associated with crim since their respective p values are greater than alpha.
+
+b. Fit a multiple regression model to predict the response using all of the predictors. Describe your results. For which predictors can we reject the null hypothesis H0:??j=0 ?
+
+```{r}
+lm_all <- lm(crim ~ ., data = Boston)
+summary(lm_all)
+```
+
+We see that the p values are lesser than alpha (0.05) for zn, dis, rad, black and medv. Hence we reject the null hypothesis and conclude that there seems to be a relationship between these variables with the response variable, crim.
+
+c. How do your results from (a) compare to your results from (b) ? Create a plot displaying the univariate regression coefficients from (a) on the x-axis, and the multiple regression coefficients from (b) on the y-axis. That is, each predictor is displayed as a single point on the plot. Its coefficient in a simple linear regression model is shown on the x-axis, and its coefficient estimate in the multiple linear regression model is shown on the y-axis.
+
+```{r}
+univ_reg <- c(coef(lm_zn)[2],coef(lm_indus)[2],coef(lm_chas)[2],coef(lm_nox)[2],coef(lm_rm)[2],coef(lm_age)[2],coef(lm_dis)[2],coef(lm_rad)[2],coef(lm_tax)[2],coef(lm_ptratio)[2],coef(lm_black)[2],coef(lm_lstat)[2],coef(lm_medv)[2])
+multi_reg <- coef(lm_all)[-1]
+
+data.frame(univ_reg, multi_reg)
+```
+
+```{r}
+plot(univ_reg, multi_reg)
+```
+
+The results in part a are different from part b because in part a the coefficients represent the effect of the variable associated with that coefficient on the response ignoring all other variables but in part b, the coefficients represent the effect of the variable associated with that coefficient on the response while keeping all the other variables fixed.
+
+When looking at the plot, we see that only for nox variable the estimate is abnormal.
+
+d. Is there evidence of non-linear association between any of the predictors and the response ? To answer this question, for each predictor X, fit a model of the form
+Y=??0+??1X+??2X2+??3X3+??.
+
+```{r}
+varlist <- names(Boston)[-c(1,4)]
+
+poly_model <- lapply(varlist, function(x) {
+    lm(substitute(crim ~ poly(i,3), list(i = as.name(x))), data = Boston)
+  })
+poly_model
+    
+```
+
+```{r}
+p_values <- lapply(poly_model, function(x) {
+    summary(x)$coefficients[c(3,4),4]
+  })
+p_values
+```
+
+By referring to the p values above, the predictors having a quadratic relationship  with the response are:
+zn, indus, nox, rm, age, dis, rad, tax, ptratio, lstat, medv
+
+By referring to the p values above, the predictors having a cubic relationship  with the response are:
+indus, nox, age, dis, ptratio, medv
