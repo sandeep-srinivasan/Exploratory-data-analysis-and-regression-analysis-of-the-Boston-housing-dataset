@@ -12,13 +12,13 @@ The correlation of various attributes with the medv is as shown above. If the va
 
 Summary of crimes rates related to number of suburbs is,
 
-![image](https://user-images.githubusercontent.com/42225976/157336983-85864528-e6b8-49ca-b01f-3701224ff4bc.png)
+![image](https://user-images.githubusercontent.com/42225976/157337769-8b963558-107d-4d12-b301-2ffb84d9bdb0.png)
 
 Since the max value of crim is significantly higher than the median, there certainly seems that there are few suburbs which have particularly high crime rates.
 
 The histogram of crimes rates v/s number of suburbs is plotted as shown,
 
-![image](https://user-images.githubusercontent.com/42225976/157337769-8b963558-107d-4d12-b301-2ffb84d9bdb0.png)
+![image](https://user-images.githubusercontent.com/42225976/157337972-b11e5e36-a786-4ea6-a798-703b2f601da6.png)
 
 From the histogram, we can consider the crime rates to be high if it crosses 30 crime rates in the Boston suburub and there are 8 suburbs with crim rates more than 30 and hence are very high.
 
